@@ -1,0 +1,305 @@
+/* =========================================================
+   Timer & Countdown — styles
+   BEM-style class names with `app__` namespace.
+   All visual values extracted from the three reference PNGs.
+   ========================================================= */
+
+/* ---------- Reset & base ---------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  background: #ffffff;
+  color: #111111;
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+}
+
+/* The page <h1> stays in the DOM (per instructions we don't restructure HTML)
+   but is hidden visually so the layout matches the reference images. */
+body > h1 {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* =========================================================
+   Root app shell
+   ========================================================= */
+.app {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* The navy bar that appears on every view. */
+.app__navbar {
+  flex: 0 0 auto;
+  height: 56px;
+  background: #0a2a8c;          /* navy from the reference */
+  display: flex;
+  align-items: center;
+  padding: 0 18px;
+}
+
+.app__navbar--top {
+  /* slim navy strip on top of the selector */
+  height: 14px;
+  padding: 0;
+}
+
+/* "Back" control inside the bottom bar */
+.app__back {
+  background: transparent;
+  border: 0;
+  color: #ffffff;
+  font-size: 26px;
+  font-weight: 400;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  padding: 6px 8px;
+  font-family: inherit;
+}
+
+.app__back:focus { outline: 2px solid #ffffff; outline-offset: 2px; }
+
+.app__back-arrow {
+  display: inline-block;
+  width: 26px;
+  height: 18px;
+  position: relative;
+}
+/* Green left-pointing arrow drawn with CSS (matches the small green arrow
+   visible left of the "Back" label in the reference). */
+.app__back-arrow::before {
+  /* arrow shaft */
+  content: "";
+  position: absolute;
+  left: 8px;
+  top: 6px;
+  width: 16px;
+  height: 6px;
+  background: #00c800;
+}
+.app__back-arrow::after {
+  /* arrow head (triangle) */
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 0;
+  height: 0;
+  border-top: 9px solid transparent;
+  border-bottom: 9px solid transparent;
+  border-right: 10px solid #00c800;
+}
+
+/* The main content area (between the bars). */
+.app__content {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+}
+
+/* =========================================================
+   View 1 — Selector
+   ========================================================= */
+.selector {
+  flex: 1 1 auto;
+  display: flex;
+  width: 100%;
+}
+
+.selector__panel {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 22px 16px 30px;
+  cursor: pointer;
+  user-select: none;
+  transition: filter 120ms ease;
+}
+
+.selector__panel:hover { filter: brightness(0.97); }
+.selector__panel:focus { outline: 2px solid #0a2a8c; outline-offset: -4px; }
+
+.selector__panel--stopwatch {
+  background: #eef7ee;          /* very pale green */
+}
+
+.selector__panel--countdown {
+  background: #ffffff;          /* plain white */
+}
+
+.selector__title {
+  font-size: 52px;
+  font-weight: 400;
+  color: #111111;
+  letter-spacing: 0.2px;
+  margin-bottom: 18px;
+  font-family: inherit;
+}
+
+/* Big arrow illustrations: built from SVG in JS so we don't ship images. */
+.selector__arrow {
+  width: 180px;
+  height: 220px;
+  display: block;
+}
+
+/* =========================================================
+   View 2 & 3 shared — display
+   ========================================================= */
+.timer {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  padding: 18px 22px 22px;
+  gap: 22px;
+}
+
+.display {
+  position: relative;
+  background: #e8eaff;          /* lavender from the reference */
+  border: 5px solid #3a3a3a;    /* thick dark border */
+  border-radius: 28px;
+  padding: 8px 28px 6px;
+  height: 170px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.04);
+}
+
+.display__main {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: 700;
+  font-size: 132px;
+  letter-spacing: -2px;
+  color: #111111;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.display__ms {
+  position: absolute;
+  right: 28px;
+  bottom: 8px;
+  font-size: 26px;
+  font-weight: 400;
+  color: #111111;
+  font-family: inherit;
+}
+
+/* Red blink applied to the display when countdown reaches zero. */
+.display--blink {
+  animation: displayBlink 0.5s steps(1, end) 0s 6;
+}
+@keyframes displayBlink {
+  0%, 100% { background: #e8eaff; }
+  50%      { background: #ff3030; }
+}
+
+/* =========================================================
+   View 2 — Stopwatch buttons
+   ========================================================= */
+.stopwatch__controls {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 4px 14px 0;
+}
+
+.btn {
+  font-family: inherit;
+  font-size: 38px;
+  font-weight: 400;
+  border: 4px solid #3a3a3a;
+  border-radius: 14px;
+  cursor: pointer;
+  color: #111111;
+  padding: 10px 0;
+  user-select: none;
+  transition: transform 60ms ease, filter 120ms ease;
+}
+
+.btn:active { transform: translateY(1px); }
+.btn:focus  { outline: 2px solid #0a2a8c; outline-offset: 2px; }
+
+.btn--primary {
+  flex: 0 0 38%;
+  background: #00c800;          /* bright green */
+  height: 96px;
+}
+
+.btn--danger {
+  flex: 0 0 38%;
+  background: #e81c1c;          /* bright red */
+  height: 96px;
+}
+
+.btn--primary:hover { filter: brightness(1.05); }
+.btn--danger:hover  { filter: brightness(1.05); }
+
+/* =========================================================
+   View 3 — Countdown keypad
+   ========================================================= */
+.countdown__pad {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-auto-rows: 1fr;
+  gap: 14px;
+  padding: 0 4px;
+}
+
+.key {
+  font-family: inherit;
+  font-size: 40px;
+  font-weight: 400;
+  border: 4px solid #3a3a3a;
+  border-radius: 12px;
+  background: #00c800;
+  color: #111111;
+  height: 86px;
+  cursor: pointer;
+  user-select: none;
+  transition: transform 60ms ease, filter 120ms ease;
+}
+
+.key:hover  { filter: brightness(1.05); }
+.key:active { transform: translateY(1px); }
+.key:focus  { outline: 2px solid #0a2a8c; outline-offset: 2px; }
+
+.key--clear {
+  /* light gray with subtle vertical gradient, matching the reference */
+  background: linear-gradient(to bottom, #d8d8d8 0%, #b8b8b8 100%);
+  color: #111111;
+}
+
+.key--set {
+  background: #00c800;
+  color: #111111;
+}
